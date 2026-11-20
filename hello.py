@@ -13,7 +13,7 @@ print("Operating System:", platform.system())
 print("Build Time:", datetime.datetime.now())
 
 print("New commit detected!")
-print("Jenkins automatic build is working!")
+print("Jenkins automatic build is working fine!")
 
 print("================================")
 print("Build completed successfully!")
