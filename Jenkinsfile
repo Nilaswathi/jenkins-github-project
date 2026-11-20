@@ -40,12 +40,9 @@ Build Status: ${currentBuild.currentResult}
 
 Build URL: ${env.BUILD_URL}
 
-Please find the complete console output attached.
-
 Regards,
 Jenkins CI/CD Automation
-""",
-            attachLog: true
+"""
         )
     }
 }
