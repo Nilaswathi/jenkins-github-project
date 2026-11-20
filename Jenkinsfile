@@ -24,28 +24,53 @@ pipeline {
     }
 
     
+
 post {
     always {
-        emailext(
-            to: 'nilavarasanswathi@gmail.com',
-            subject: "Jenkins Build: ${currentBuild.currentResult} - ${env.JOB_NAME}",
-            body: """
-Hello,
+        script {
+            echo "Testing Jenkins email notifications..."
 
-Your GitHub commit triggered an automatic Jenkins build.
+            // Test basic Jenkins email
+            try {
+                mail(
+                    to: 'nilavarasanswathi@gmail.com',
+                    subject: "Jenkins Basic Email - ${currentBuild.currentResult}",
+                    body: """
+                    Jenkins basic email test.
 
-Project: ${env.JOB_NAME}
-Build Number: ${env.BUILD_NUMBER}
-Build Status: ${currentBuild.currentResult}
+                    Project: ${env.JOB_NAME}
+                    Build: ${env.BUILD_NUMBER}
+                    Status: ${currentBuild.currentResult}
+                    """
+                )
+                echo "Basic email step executed."
+            } catch (err) {
+                echo "Basic email failed: ${err}"
+            }
 
-Build URL: ${env.BUILD_URL}
+            // Test Extended Email Plugin
+            try {
+                emailext(
+                    to: 'nilavarasanswathi@gmail.com',
+                    subject: "Jenkins Extended Email - ${currentBuild.currentResult}",
+                    body: """
+                    Jenkins extended email test.
 
-Regards,
-Jenkins CI/CD Automation
-"""
-        )
+                    Project: ${env.JOB_NAME}
+                    Build: ${env.BUILD_NUMBER}
+                    Status: ${currentBuild.currentResult}
+                    Build URL: ${env.BUILD_URL}
+                    """,
+                    attachLog: true
+                )
+                echo "Extended email step executed."
+            } catch (err) {
+                echo "Extended email failed: ${err}"
+            }
+        }
     }
 }
+
 }
 
 
