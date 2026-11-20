@@ -1,4 +1,3 @@
-
 pipeline {
     agent any
 
@@ -24,23 +23,53 @@ pipeline {
         }
     }
 
-    post {
-    	always {
-        	emailext(
-            		to: 'nilavarasanswathi@gmail.com',
-            		subject: "Build ${currentBuild.currentResult}: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-            		body: """
-    Build Status: ${currentBuild.currentResult}
+    
+post {
+    always {
+        script {
+            echo "Testing Jenkins email notifications..."
 
-    Project: ${env.JOB_NAME}
-    Build Number: ${env.BUILD_NUMBER}
-    Build URL: ${env.BUILD_URL}
+            // Test basic Jenkins email
+            try {
+                mail(
+                    to: 'nilavarasanswathi@gmail.com',
+                    subject: "Jenkins Basic Email - ${currentBuild.currentResult}",
+                    body: """
+                    Jenkins basic email test.
 
-    The complete Jenkins console output is attached.
-            """,
-            attachLog: true
-        		)
-    	       }
-	}
+                    Project: ${env.JOB_NAME}
+                    Build: ${env.BUILD_NUMBER}
+                    Status: ${currentBuild.currentResult}
+                    """
+                )
+                echo "Basic email step executed."
+            } catch (err) {
+                echo "Basic email failed: ${err}"
+            }
+
+            // Test Extended Email Plugin
+            try {
+                emailext(
+                    to: 'nilavarasanswathi@gmail.com',
+                    subject: "Jenkins Extended Email - ${currentBuild.currentResult}",
+                    body: """
+                    Jenkins extended email test.
+
+                    Project: ${env.JOB_NAME}
+                    Build: ${env.BUILD_NUMBER}
+                    Status: ${currentBuild.currentResult}
+                    Build URL: ${env.BUILD_URL}
+                    """,
+                    attachLog: true
+                )
+                echo "Extended email step executed."
+            } catch (err) {
+                echo "Extended email failed: ${err}"
+            }
+        }
+    }
 }
+
+}
+
 
