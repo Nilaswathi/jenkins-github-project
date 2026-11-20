@@ -12,6 +12,9 @@ print("Python Version:", platform.python_version())
 print("Operating System:", platform.system())
 print("Build Time:", datetime.datetime.now())
 
+print("New commit detected!")
+print("Jenkins automatic build is working!")
+
 print("================================")
 print("Build completed successfully!")
 

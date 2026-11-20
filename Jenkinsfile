@@ -25,28 +25,22 @@ pipeline {
     }
 
     post {
-        always {
-            emailext(
-                subject: "Jenkins Build: ${currentBuild.currentResult}",
-                body: """
-Hello,
+    	always {
+        	emailext(
+            		to: 'nilavarasanswathi@gmail.com',
+            		subject: "Build ${currentBuild.currentResult}: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+            		body: """
+    Build Status: ${currentBuild.currentResult}
 
-A new GitHub commit triggered the Jenkins pipeline.
+    Project: ${env.JOB_NAME}
+    Build Number: ${env.BUILD_NUMBER}
+    Build URL: ${env.BUILD_URL}
 
-Project: ${env.JOB_NAME}
-Build Number: ${env.BUILD_NUMBER}
-Build Status: ${currentBuild.currentResult}
-Build URL: ${env.BUILD_URL}
-
-Console Output:
-${currentBuild.rawBuild.getLog(100).join('\n')}
-
-Regards,
-Jenkins CI/CD
-""",
-                to: 'nilavarasan914@gmail.com'
-            )
-        }
-    }
+    The complete Jenkins console output is attached.
+            """,
+            attachLog: true
+        		)
+    	       }
+	}
 }
 
