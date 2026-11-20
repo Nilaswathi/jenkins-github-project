@@ -26,50 +26,29 @@ pipeline {
     
 post {
     always {
-        script {
-            echo "Testing Jenkins email notifications..."
+        emailext(
+            to: 'nilavarasanswathi@gmail.com',
+            subject: "Jenkins Build: ${currentBuild.currentResult} - ${env.JOB_NAME}",
+            body: """
+Hello,
 
-            // Test basic Jenkins email
-            try {
-                mail(
-                    to: 'nilavarasanswathi@gmail.com',
-                    subject: "Jenkins Basic Email - ${currentBuild.currentResult}",
-                    body: """
-                    Jenkins basic email test.
+Your GitHub commit triggered an automatic Jenkins build.
 
-                    Project: ${env.JOB_NAME}
-                    Build: ${env.BUILD_NUMBER}
-                    Status: ${currentBuild.currentResult}
-                    """
-                )
-                echo "Basic email step executed."
-            } catch (err) {
-                echo "Basic email failed: ${err}"
-            }
+Project: ${env.JOB_NAME}
+Build Number: ${env.BUILD_NUMBER}
+Build Status: ${currentBuild.currentResult}
 
-            // Test Extended Email Plugin
-            try {
-                emailext(
-                    to: 'nilavarasanswathi@gmail.com',
-                    subject: "Jenkins Extended Email - ${currentBuild.currentResult}",
-                    body: """
-                    Jenkins extended email test.
+Build URL: ${env.BUILD_URL}
 
-                    Project: ${env.JOB_NAME}
-                    Build: ${env.BUILD_NUMBER}
-                    Status: ${currentBuild.currentResult}
-                    Build URL: ${env.BUILD_URL}
-                    """,
-                    attachLog: true
-                )
-                echo "Extended email step executed."
-            } catch (err) {
-                echo "Extended email failed: ${err}"
-            }
-        }
+Please find the complete console output attached.
+
+Regards,
+Jenkins CI/CD Automation
+""",
+            attachLog: true
+        )
     }
 }
-
 }
 
 
